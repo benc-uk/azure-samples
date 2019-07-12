@@ -1,0 +1,6 @@
+azure-cognitiveservices-vision-computervision>=0.3.0
+#azure-cognitiveservices-vision-contentmoderator>=1.0.0
+#azure-cognitiveservices-vision-customvision>=0.4.0
+requests
+Pillow
+python-dotenv

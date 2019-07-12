@@ -2,3 +2,6 @@
 **/vars.py
 **/vars.ps1
 **/.env
+**/node_modules
+**/obj
+**/bin

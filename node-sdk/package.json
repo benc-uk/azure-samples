@@ -1,0 +1,11 @@
+{
+  "name": "azure-nodesdk",
+  "description": "Example scripts for Node.js Azure SDK",
+  "version": "0.1.0",
+  "author": "Ben Coleman",
+  "dependencies": {
+    "@azure/arm-compute": "^10.0.0",
+    "@azure/ms-rest-nodeauth": "^2.0.2",
+    "dotenv": "^8.0.0"
+  }
+}
