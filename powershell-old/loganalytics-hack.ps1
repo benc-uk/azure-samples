@@ -2,7 +2,7 @@
 $CustomerId = "26d0a5a4-ef74-4129-a665-15924e3956a5"  
 
 # Replace with your Primary Key
-$SharedKey = "vZ7muG+MsGYVm1t8Yi4uIUFYg7NY8wiKZivbs0kRAztNlT+vW+/neRycCOGR7jEciQyLGoXyIjM2eC5I4yL5hQ=="
+$SharedKey = ""
 
 # Specify the name of the record type that you'll be creating
 $LogType = "TestingIgnore"
