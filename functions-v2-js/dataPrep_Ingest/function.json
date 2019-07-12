@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "type": "blobTrigger",
+      "direction": "in",
+      "name": "triggerBlob",
+      "path": "dataprep-in/{name}",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "queue",
+      "direction": "out",
+      "name": "outputQueue",
+      "queueName": "dataprep-queue",
+      "connection": "AzureWebJobsStorage"
+    }    
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "disabled": false,
+  "bindings": [
+    {
+      "name": "inputQueueMessage",
+      "type": "queueTrigger",
+      "direction": "in",
+      "queueName": "dataprep-queue",
+      "connection": "AzureWebJobsStorage"
+    },
+    {
+      "type": "blob",
+      "name": "outputBlob",
+      "path": "dataprep-out/{rand-guid}.json",
+      "connection": "AzureWebJobsStorage",
+      "direction": "out"
+    }
+  ]
+}

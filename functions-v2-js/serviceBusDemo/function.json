@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "name": "sbMessage",
+      "type": "serviceBusTrigger",
+      "direction": "in",
+      "queueName": "simpleq",
+      "connection": "demosvcbus_RootManageSharedAccessKey_SERVICEBUS"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Serverless Demo Cam</title>
+  <link rel="shortcut icon" href="http://simpleicon.com/wp-content/uploads/camera.png" type="image/x-icon">
+  <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <style>
+    body, html { background-color: #333; height: 100%; min-height: 100%; padding: 0; margin: 0; 
+      font-family: 'Trebuchet MS', Arial, sans-serif }
+    .inputfile {
+      width: 0.1px; height: 0.1px;
+      opacity: 0; overflow: hidden; position: absolute;
+      z-index: -1;
+    }
+    .inputfile + label {
+      font-size: 2em; cursor: pointer; font-weight: 700;
+      color: #999; background-color: #111;
+      display: inline-block;padding: 15px;
+      border: 3px solid #777;
+    }
+    .inputfile:focus + label,
+    .inputfile + label:hover {
+        background-color: #222; color: #bbb
+    }
+    #img {
+      width: 100%;
+    }
+    #msg {
+      font-size: 1.5em; color: rgb(68, 152, 231);
+    }
+    .center { text-align: center; padding-top: 10px; padding-bottom: 10px; }
+  </style>
+
+  <div class="center" id="buttonDiv">
+    <input type="file" name="file" id="file" class="inputfile" accept="image/*" capture/>
+    <label for="file">&#x1F4F7; Take A Photo</label>
+  </div>
+  <div class="center">
+    <span id="msg">&nbsp;</span>
+  </div>
+
+  <img src="" id="img">
+</html>
+
+<script>
+  // Config here
+  const POST_ENDPOINT = "/api/cameraFunction";
+  //const POST_ENDPOINT = "https://functions-app-demo.azurewebsites.net/api/cameraFunction";
+  const MAX_SIZE = 1600;
+  const JPEG_QUAL = 0.7;
+
+  $('#file').on('change', function (e) {
+    var file = e.target.files[0];
+
+    if (file) {
+      if (/^image\//i.test(file.type)) {
+        processFile(file);
+      } else {
+        alert('Not a valid image!');
+      }
+    }
+  });
+  
+  function processFile(file) {
+
+    $("#msg").html('Uploading please wait...');
+    $("#msg").show();
+
+    // Load the image
+    var reader = new FileReader();
+    reader.onload = function (readerEvent) {
+      var image = new Image();
+      image.onload = function (imageEvent) {
+
+        // Resize the image
+        var canvas = document.createElement('canvas')
+        var width = image.width
+        var height = image.height
+        if (width > height) {
+            if (width > MAX_SIZE) {
+              height *= MAX_SIZE / width;
+              width = MAX_SIZE;
+            }
+        } else {
+            if (height > MAX_SIZE) {
+              width *= MAX_SIZE / height;
+              height = MAX_SIZE;
+            }
+        }
+        // Draw resized into canvas
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+        var dataUrl = canvas.toDataURL('image/jpeg', JPEG_QUAL);
+
+        // Display on page (with real img element)
+        $('#img').attr('src', dataUrl);
+
+        // Now HTTP POST to endpoint
+        var imgData = dataUrl.split(',')[1];
+        $.ajax({
+          url: POST_ENDPOINT,
+          type: "POST",
+          data: imgData,
+          contentType: "application/octet-stream;base64",
+          // If good or bad, display message
+          success: function () {
+            $("#msg").html('Photo uploaded to Azure Functions!');
+            $("#msg").show().delay(4000).fadeOut();
+          },
+          error: function (xhr, status, error) {
+            $("#msg").html(status+' '+error);
+          }
+        }); 
+      }
+      image.src = readerEvent.target.result;
+    }
+
+    reader.readAsDataURL(file);
+  }
+</script>
