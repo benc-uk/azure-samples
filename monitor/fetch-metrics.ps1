@@ -4,9 +4,19 @@
 
 $resId = "/subscriptions/52512f28-c6ed-403e-9569-82a9fb9fec91/resourceGroups/Demo.AppService/providers/Microsoft.Web/sites/nodejs-demoapp"
 
+
 #
 # Get auth token from AAD
 #
+# $subscriptionId = ""
+# $clientId = ""
+# $clientSecret = ""
+# $sub = Get-AzSubscription -SubscriptionId $subscriptionId
+# $tenantId = $sub.TenantId
+# $AuthContext = [Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext]"https://login.microsoftonline.com/${tenantId}"
+# $cred = New-Object -TypeName Microsoft.IdentityModel.Clients.ActiveDirectory.ClientCredential -ArgumentList ($clientId, $clientSecret)
+# $token = $AuthContext.AcquireTokenAsync("https://management.core.windows.net/", $cred).GetAwaiter().GetResult().AccessToken
+
 $currentAzContext = Get-AzContext 
 echo "### Aquiring token from AAD for signed in context"
 $currentAzContext
