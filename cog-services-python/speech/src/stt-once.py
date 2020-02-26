@@ -15,12 +15,18 @@ if len(sys.argv) < 2:
   sys.exit(0)
 input_file = sys.argv[1]
 
-# The default language is "en-us"
+# Connect using the Microsoft hosted service
 speech_config = speechsdk.SpeechConfig(
   speech_recognition_language='en-gb',
   subscription=API_KEY, 
   region=API_REGION
 )
+
+# Connect via hostname of container
+# speech_config = speechsdk.SpeechConfig(
+#   speech_recognition_language='en-gb',
+#   host="http://localhost:5000"
+# )
 
 # The input file
 audio_config = speechsdk.audio.AudioConfig(filename=input_file)
@@ -31,7 +37,8 @@ speech_recognizer = speechsdk.SpeechRecognizer(
   audio_config=audio_config
 )
 
-# Call the API with recognize_once, this only checks the first "utterance"
+# Call the API with recognize_once, this only checks the first 15 seconds
+# And returns the first "utterance"
 result = speech_recognizer.recognize_once()
 
 # Check the result
