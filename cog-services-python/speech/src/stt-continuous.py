@@ -2,6 +2,7 @@ import time
 import wave
 import os
 import sys
+import json
 import azure.cognitiveservices.speech as speechsdk
 from dotenv import load_dotenv
 
@@ -45,7 +46,8 @@ def stop_cb(evt):
   done = True
 
 # Connect callbacks to the events fired by the speech recognizer
-speech_recognizer.recognized.connect(lambda evt: print('### RECOGNIZED: {}'.format(evt.result.text)))
+#speech_recognizer.recognized.connect(lambda evt: print('### RECOGNIZED: {}'.format(json.dumps(json.loads(evt.result.json), indent=4, sort_keys=True))))
+speech_recognizer.recognized.connect(lambda evt: print('### RECOGNIZED: {}'.format(evt.result.text) ))
 speech_recognizer.session_started.connect(lambda evt: print('### SESSION STARTED!\n'))
 speech_recognizer.session_stopped.connect(lambda evt: print('### SESSION STOPPED!'))
 speech_recognizer.canceled.connect(lambda evt: print('\n### CANCELED {}'.format(evt.cancellation_details)))

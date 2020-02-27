@@ -1,4 +1,6 @@
 azure-cognitiveservices-vision-computervision>=0.3.0
+azure-cognitiveservices-speech
+
 requests
 Pillow
 python-dotenv
