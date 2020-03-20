@@ -7,15 +7,17 @@ import (
 	"fmt"
 	"image"
 	"image/jpeg"
-	_ "image/jpeg"
-	_ "image/png"
+	"image/png"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
+	"github.com/benc-uk/gofract/pkg/colors"
+	"github.com/benc-uk/gofract/pkg/fractals"
 	"github.com/disintegration/imaging"
 )
 
@@ -32,6 +34,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/helloFunction", helloFunctionHandler)
 	mux.HandleFunc("/resizeImageFunction", resizerFunctionHandler)
+	mux.HandleFunc("/fractalFunction", fractalFunctionHandler)
 
 	log.Println("### Function handler server started on port:", httpInvokerPort)
 
@@ -149,4 +152,60 @@ func resizerFunctionHandler(resp http.ResponseWriter, req *http.Request) {
 	// Finally! Send HTTP response back...
 	resp.Header().Set("Content-Type", "application/json")
 	resp.Write(invokeResponseJSON)
+}
+
+func fractalFunctionHandler(resp http.ResponseWriter, req *http.Request) {
+	width, err := strconv.Atoi(req.URL.Query().Get("width"))
+	if err != nil {
+		width = 1200
+	}
+	zoom, err := strconv.ParseFloat(req.URL.Query().Get("zoom"), 64)
+	if err != nil {
+		zoom = 1.0
+	}
+	i, err := strconv.ParseFloat(req.URL.Query().Get("i"), 64)
+	if err != nil {
+		i = -0.6
+	}
+	r, err := strconv.ParseFloat(req.URL.Query().Get("r"), 64)
+	if err != nil {
+		r = 0.0
+	}
+	iters, err := strconv.ParseFloat(req.URL.Query().Get("iters"), 64)
+	if err != nil {
+		iters = 100
+	}
+
+	fractal := fractals.Fractal{
+		FractType:    "mandelbrot",
+		Center:       fractals.ComplexPair{i, r},
+		MagFactor:    zoom,
+		MaxIter:      iters,
+		W:            3.0,
+		H:            2.0,
+		ImgWidth:     width,
+		JuliaSeed:    fractals.ComplexPair{0.355, 0.355},
+		InnerColor:   "#000000",
+		FullScreen:   false,
+		ColorRepeats: 2.0,
+	}
+
+	gradient := colors.GradientTable{}
+	gradient.AddToTable("#000762", 0.0)
+	gradient.AddToTable("#0B48C3", 0.2)
+	gradient.AddToTable("#ffffff", 0.4)
+	gradient.AddToTable("#E3A000", 0.5)
+	gradient.AddToTable("#000762", 0.9)
+
+	imgHeight := int(float64(fractal.ImgWidth) * float64(fractal.H/fractal.W))
+	image := image.NewRGBA(image.Rect(0, 0, fractal.ImgWidth, imgHeight))
+
+	fractal.Render(image, gradient)
+
+	outImageBuffer := new(bytes.Buffer)
+	_ = png.Encode(outImageBuffer, image)
+	outImageBytes := outImageBuffer.Bytes()
+
+	resp.Header().Set("Content-Type", "image/png")
+	resp.Write(outImageBytes)
 }

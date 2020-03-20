@@ -5,7 +5,7 @@ FROM golang:1.14-buster as build
 WORKDIR /build
 
 COPY go.mod .
-COPY main.go .
+COPY *.go ./
 RUN go build -o func-server
 
 # ===== Runtime stage ======================================
@@ -19,5 +19,6 @@ ENV AzureFunctionsJobHost__Logging__Console__IsEnabled=true
 
 COPY host.json .
 COPY helloFunction/ ./helloFunction
+COPY resizeImageFunction/ ./resizeImageFunction
 COPY fractalFunction/ ./fractalFunction
 COPY --from=build build/func-server .

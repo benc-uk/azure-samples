@@ -8,3 +8,7 @@ content-type: application/json
 ###########################################
 
 GET http://localhost:7071/api/helloFunction
+
+###########################################
+
+GET http://localhost:7071/api/fractalFunction
