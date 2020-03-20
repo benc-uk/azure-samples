@@ -1,0 +1,35 @@
+#
+# Generic build and push to Dockerhub flow for GitHub Actions
+#
+
+name: Build Dockerhub Image
+
+on: 
+  push: 
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# Create secret called DOCKER_PASSWORD before running
+env:
+  dockerUser: CHANGEME
+  imageName: CHANGEME
+  imageTag: latest
+  
+jobs:
+  buildJob:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build the Docker image
+      run: docker build . --file ./Dockerfile --tag $dockerUser/$imageName:$imageTag
+    
+    - name: Login to Dockerhub
+      if: github.event_name == 'push'
+      run: docker login -u $dockerUser -p ${{ secrets.DOCKER_PASSWORD }} 
+      
+    - name: Push to Dockerhub
+      if: github.event_name == 'push'
+      run: docker push $dockerUser/$imageName:$imageTag
