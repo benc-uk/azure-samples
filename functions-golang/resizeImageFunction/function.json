@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "name": "inputBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "golang-photo-in/{name}",
+      "connection": "blobAccount"
+    },
+    {
+      "name": "outputBlob",
+      "type": "blob",
+      "direction": "out",
+      "path": "golang-photo-out/{name}",
+      "connection": "blobAccount"
+    }    
+  ]
+}

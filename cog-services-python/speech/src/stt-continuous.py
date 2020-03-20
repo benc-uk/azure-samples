@@ -23,6 +23,12 @@ speech_config = speechsdk.SpeechConfig(
   region=API_REGION
 )
 
+# Enable detailed output
+#speech_config.output_format = speechsdk.OutputFormat.Detailed
+
+# Enable per-word level output, also enables detailed mode 
+speech_config.request_word_level_timestamps()
+
 # Connect via hostname of container
 # speech_config = speechsdk.SpeechConfig(
 #   speech_recognition_language='en-gb',
@@ -46,12 +52,12 @@ def stop_cb(evt):
   done = True
 
 # Connect callbacks to the events fired by the speech recognizer
-#speech_recognizer.recognized.connect(lambda evt: print('### RECOGNIZED: {}'.format(json.dumps(json.loads(evt.result.json), indent=4, sort_keys=True))))
-speech_recognizer.recognized.connect(lambda evt: print('### RECOGNIZED: {}'.format(evt.result.text) ))
+speech_recognizer.recognized.connect(lambda evt: print('### RECOGNIZED: {}'.format(json.dumps(json.loads(evt.result.json), indent=4, sort_keys=True))))
+#speech_recognizer.recognized.connect(lambda evt: print('### RECOGNIZED WORD: {}'.format(evt.result.json) ))
 speech_recognizer.session_started.connect(lambda evt: print('### SESSION STARTED!\n'))
 speech_recognizer.session_stopped.connect(lambda evt: print('### SESSION STOPPED!'))
 speech_recognizer.canceled.connect(lambda evt: print('\n### CANCELED {}'.format(evt.cancellation_details)))
-#speech_recognizer.recognizing.connect(lambda evt: print('### RECOGNIZING: {}'.format(evt.result.text)))
+#speech_recognizer.recognizing.connect(lambda evt: print('### RECOGNIZING: {}'.format(evt.result.json)))
 
 # Stop recognition on either session stopped or canceled events
 #speech_recognizer.session_stopped.connect(stop_cb)

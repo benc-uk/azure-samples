@@ -1,0 +1,10 @@
+POST http://localhost:7071/api/helloFunction
+content-type: application/json
+
+{
+  "Foobar": "Lemon curd"
+}
+
+###########################################
+
+GET http://localhost:7071/api/helloFunction
