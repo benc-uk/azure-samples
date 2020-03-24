@@ -77,11 +77,12 @@ while true
 do
    STATE=`az container show --name "$NAME" --resource-group "$RES_GRP" -o tsv --query "provisioningState"`
    if [ "$STATE" == "Succeeded" ]; then
-      echo -e "\n\e[34m»»» 🚀  \e[36mServer is deployed and started!\e[39m"
+      echo -e "\n\e[34m»»» 🚀  \e[36mServer is deployed, container started!\e[39m"
       IP=`az container show --name "$NAME" --resource-group "$RES_GRP" --query "ipAddress.ip" -o tsv`
-      echo -e "\n\e[34m»»» 😄  \e[36mConnect to the server using: $NAME.$LOC.azurecontainer.io or $IP"
+      echo -e "\e[34m»»» 😄  \e[36mConnect to the server using: $NAME.$LOC.azurecontainer.io or $IP"
+      echo -e "\e[34m»»» 😮  \e[36mIt might take up to 5 minutes before the server is fully ready..."
       break
    fi
-   echo -e "\n\e[34m»»» ⌚  \e[36mServer still starting, please wait...\e[39m"
+   echo -e "\n\e[34m»»» ⌚  \e[36mContainer still starting, please wait...\e[39m"
    sleep 5
 done
