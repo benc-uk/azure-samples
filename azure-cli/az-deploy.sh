@@ -20,8 +20,8 @@ GRP_PREFIX="Temp.Deployment."
 usage(){
 echo -e "\
 \e[34m════════════════════════════════════════════════════════════
-az-deploy.sh - Deploy Azure Resource Manager (ARM) templates
-════════════════════════════════════════════════════════════
+\e[36maz-deploy.sh - Deploy Azure Resource Manager (ARM) templates
+\e[34m════════════════════════════════════════════════════════════
 \e[39mParameters:
     -t, --template       \e[33mInput template file (required)\e[39m
     [-g, --group]        \e[33mResource group to deploy to, will be created\e[39m
