@@ -12,7 +12,7 @@ fi
 echo -e "\n\e[34m╔══════════════════════════════════╗"
 echo -e "║\e[33m    Minecraft Server Deployer\e[34m     ║"
 echo -e "╚══════════════════════════════════╝"
-echo -e "\e[35mBen Coleman, 2020   \e[39mv1.0.0  🚀 🚀 🚀\n"
+echo -e "\e[35mBen Coleman, 2020   \e[39mv1.0.0  ⛏  🐑  💎\n"
 
 echo -e "\e[34m»»» 🍳  \e[32mRunning pre-req checks\e[0m..."
 az > /dev/null 2>&1
@@ -29,21 +29,22 @@ fi
 
 echo -e "\e[34m»»» 🔑  \e[32mUsing default Azure subscription \e[33m'$(az account show --query name -o tsv)'\e[39m"
 
-# External vars
+# User configurable parameters
 RES_GRP=$1
 LOC=$2
 NAME=$3
 
-# Internal vars
-STORAGE_PREFIX="mc"
+# Storage variables
+# Note. Use a MD5 hash of the server name to name the storage account
 STORAGE_SUFFIX=$(echo -n $NAME | md5sum | cut -c -5 )
-STORAGE_NAME="${STORAGE_PREFIX}${STORAGE_SUFFIX}"
+STORAGE_NAME="mc${STORAGE_SUFFIX}"
 SHARE_NAME="minecraft"
 
-# Container settings
+# Minecraft container settings
 IMAGE="itzg/minecraft-bedrock-server"
-MEM=1
-CPU=2
+#IMAGE="itzg/minecraft-server"
+MEM=1 # Gigabytes
+CPU=2 # Cores
 
 # Quit on error
 set -e
