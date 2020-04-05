@@ -1,4 +1,4 @@
-# Azure Functions v2
+# Azure Functions 
 
 ## Node.js/JavaScript functions 
 
