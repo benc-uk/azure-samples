@@ -1,8 +1,9 @@
 # Deploy Minecraft Server in Azure
 
-Run it as a one liner, as follows from [Azure Cloud Shell](https://shell.azure.com)
+Using [Azure Cloud Shell](https://shell.azure.com) you can deploy a Minecraft server as a Container Instance
 
-Pick the resource group, region and server name. Server name must be unique and a valid DNS name (no spaces or dots etc)
+Pick the resource group, region and server name. Server name must be unique and a valid DNS name (no spaces or dots etc).  
+Run directly using this command
 ```
 curl -s https://raw.githubusercontent.com/benc-uk/azure-samples/master/azure-cli/minecraft-server.sh | bash -s "RESGRP" "REGION" "SERVERNAME"
 ```
