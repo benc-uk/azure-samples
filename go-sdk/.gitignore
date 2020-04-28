@@ -1,4 +1,5 @@
 setenv.sh
 .env
+main
 #**/webapp-container
 #**/webapp-git

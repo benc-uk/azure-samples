@@ -1,0 +1,12 @@
+{
+  "scriptFile": "function.py",
+  "bindings": [
+    {
+      "name": "myblob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "input/{name}",
+      "connection": "TriggerStorageAccount"
+    }
+  ]
+}

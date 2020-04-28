@@ -26,7 +26,7 @@ Takes four parameters
 - Public Git URL (e.g. GitHub) to deploy to the new Web App
 
 ```
-cd src/webapp
+cd cmd/webapp
 go run main.go myResGrp northeurope demosite2018 https://github.com/benc-uk/nodejs-demoapp.git
 ```
 
@@ -40,6 +40,6 @@ Takes four parameters
 - Dockerhub public image, e.g. `nginx` or one from your own repo
 
 ```
-cd src/webapp-container
-go run main.go myResGrp northeurope demosite2018 bencuk/nodejs-demoapp
+cd cmd/webapp-container
+go run main.go -g temp.myResGrp -l northeurope -n demosite22 -i bencuk/nodejs-demoapp
 ```
