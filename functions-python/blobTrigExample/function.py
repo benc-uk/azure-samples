@@ -8,7 +8,7 @@ def main(myblob: func.InputStream):
   logging.info(f"### Python blob trigger function processed blob \n### Name: {myblob.name}\n### Blob Size: {myblob.length} bytes\n")
 
   # Read in the blob contents
-  blobContents = img_data = myblob.read()
+  blobContents = myblob.read()
 
   # Unmarshall the JSON string into a dict
   data = json.loads(blobContents)

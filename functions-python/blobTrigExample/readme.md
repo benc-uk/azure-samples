@@ -8,4 +8,5 @@ For a `BlobTrigger` to work, you provide a path which dictates where the blobs a
 
 ## Learn more
 
-<TODO> Documentation
+[Trigger Reference](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob-trigger?tabs=python) 
+[Input Reference](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob-input?tabs=python) 
