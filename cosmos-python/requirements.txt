@@ -1,0 +1,2 @@
+azure-cosmos>=4.0.0b6
+python-dotenv>=0.13.0
