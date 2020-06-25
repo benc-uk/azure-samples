@@ -1,0 +1,6 @@
+--index-url https://test.pypi.org/simple
+msgraphcore
+--index-url https://pypi.python.org/simple
+azure-identity
+requests
+python-dotenv

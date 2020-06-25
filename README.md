@@ -1,6 +1,7 @@
 # Azure Samples & Snippets
 This contains various snippets, samples and getting started code all relating to Azure
 
+- [graph-python](./graph-python) - Python sample for calling MS Graph API
 - [cog-services](./cog-services) - Python samples for calling Azure Cognitive Services
 - [functions-v2-js](./functions-node) - Azure Functions v3 examples in Node.js
 - [functions-golang](./functions-golang) - Custom HTTP handler written in Go, with Functions
