@@ -1,0 +1,22 @@
+{
+  "scriptFile": "function.py",
+  "bindings": [
+    {
+      "type": "eventHubTrigger",
+      "name": "event",
+      "dataType": "string",
+      "direction": "in",
+      "eventHubName": "bcdemo",
+      "connection": "IoTHubConnection",
+      "cardinality": "one",
+      "consumerGroup": "$Default"
+    },
+    {
+      "name": "outputblob",
+      "type": "blob",
+      "path": "output/{location}/{personId}-{DateTime}.json",
+      "connection": "AzureWebJobsStorage",
+      "direction": "out"
+    }     
+  ]
+}

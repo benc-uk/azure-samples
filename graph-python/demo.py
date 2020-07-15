@@ -10,6 +10,7 @@ load_dotenv()
 scopes = ['User.Read', 'User.ReadBasic.All']
 
 # Use device code flow as we're a console app
+# Set CLIENT_ID in .env file before running
 browser_credential = DeviceCodeCredential(client_id=os.environ['CLIENT_ID'])
 graph_session = GraphSession(browser_credential, scopes)
 
