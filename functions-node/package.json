@@ -1,7 +1,14 @@
 {
+  "name": "benc-func",
+  "version": "0.0.1",
+  "description": "Example and test Azure Functions",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "author": "Ben Coleman",
   "dependencies": {
     "azure-storage": "^2.10.3",
-    "csv-parse": "^4.8.8",
-    "request": "~2.88.1"
+    "csv-parse": "^4.12.0"
   }
 }

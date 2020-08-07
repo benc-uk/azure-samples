@@ -1,3 +1,10 @@
 {
-  "python.pythonPath": "cosmos-python/.venv/bin/python3"
+  "python.pythonPath": "cosmos-python/.venv/bin/python3",
+  "azureFunctions.deploySubpath": "functions-node",
+  "azureFunctions.postDeployTask": "npm install",
+  "azureFunctions.projectLanguage": "JavaScript",
+  "azureFunctions.projectRuntime": "~3",
+  "debug.internalConsoleOptions": "neverOpen",
+  "azureFunctions.preDeployTask": "npm prune",
+  "azureFunctions.projectSubpath": "functions-node"
 }
