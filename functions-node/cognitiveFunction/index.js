@@ -4,8 +4,7 @@
 const http = require('./simple-http.js');
 
 const VISION_API_KEY = process.env.VISION_API_KEY;
-const VISION_API_REGION = process.env.VISION_API_REGION || "westeurope"
-const VISION_API_ENDPOINT = `https://${VISION_API_REGION}.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Categories,Tags,Description,Faces,ImageType,Color&details=Celebrities`;
+const VISION_API_URL = `${process.env.VISION_API_ENDPOINT}/vision/v1.0/analyze?visualFeatures=Categories,Tags,Description,Faces,ImageType,Color&details=Celebrities`;
 
 module.exports = function (context, blobTrigger) {
   context.log("### New photo uploaded, starting analysis...");
@@ -13,7 +12,7 @@ module.exports = function (context, blobTrigger) {
   // Call cognitive service vision API
   // Post simple JSON object with the url of the image and put the key in the headers
   http.postJSON(
-    VISION_API_ENDPOINT, 
+    VISION_API_URL, 
     { url: context.bindingData.uri }, 
     { 'Ocp-Apim-Subscription-Key': VISION_API_KEY }
   )
