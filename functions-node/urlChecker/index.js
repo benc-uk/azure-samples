@@ -18,7 +18,7 @@ main = async function (context, myTimer) {
     return
   }
 
-  context.log(`### Checking URL ${URL}`)
+  context.log(`### Checking URL ${URL} for status ${OK_STATUS}`)
   context.log(`###  - Expecting '${FIND_STRING}' to be on the page`)
   context.log(`###  - Expecting '${NOT_FIND_STRING}' to NOT be on the page`)
 
@@ -53,10 +53,10 @@ main = async function (context, myTimer) {
     checkMessage = ``
     notCheckMessage = ``
     if (FIND_STRING && !findString) {
-      checkMessage = `<p>Looked for '${FIND_STRING}' which was <b>NOT</b> found on the page!</p>`
+      checkMessage = `<p>Expected '${FIND_STRING}' to be on the page, but it was <b>NOT</b> found!</p>`
     }
     if (NOT_FIND_STRING && !notFindString) {
-      notCheckMessage = `<p>Expected '${NOT_FIND_STRING}' to not be on the page, but it <b>WAS</b> found'</p>`
+      notCheckMessage = `<p>Expected '${NOT_FIND_STRING}' to not be on the page, but it <b>WAS</b> found!</p>`
     }
 
     context.bindings.message = {
@@ -65,8 +65,8 @@ main = async function (context, myTimer) {
       subject: "URL Checker Failed!",
       content: [{
         type: 'text/html',
-        value: `<h2>  Alert at ${timeStamp}<h2>
-                <h3>URL check for ${URL} has failed. HTTP status was ${response.status}</h3>
+        value: `<h2>⚠ Alert at ${timeStamp}<h2>
+                <h3>🌐 URL check for ${URL} has failed. HTTP status was ${response.status}</h3>
                 ${checkMessage}
                 ${notCheckMessage}
                 <br><p>Bye!</p>
