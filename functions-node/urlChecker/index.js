@@ -53,23 +53,23 @@ main = async function (context, myTimer) {
     checkMessage = ``
     notCheckMessage = ``
     if (FIND_STRING && !findString) {
-      checkMessage = `<p>Expected '${FIND_STRING}' to be on the page, but it was <b>NOT</b> found!</p>`
+      checkMessage = `<p>Expected '${FIND_STRING}' to be on the page, but it was <b>NOT</b> found! 😮</p>`
     }
     if (NOT_FIND_STRING && !notFindString) {
-      notCheckMessage = `<p>Expected '${NOT_FIND_STRING}' to not be on the page, but it <b>WAS</b> found!</p>`
+      notCheckMessage = `<p>Expected '${NOT_FIND_STRING}' to not be on the page, but it <b>WAS</b> found! 😫</p>`
     }
 
     context.bindings.message = {
       "personalizations": [{ "to": [{ "email": CHECK_EMAIL_TO }] }],
       from: { email: CHECK_EMAIL_FROM },
-      subject: "URL Checker Failed!",
+      subject: "URL Checker Alert",
       content: [{
         type: 'text/html',
-        value: `<h2>⚠ Alert at ${timeStamp}<h2>
+        value: `<h2>🔥 Alert at ${timeStamp}<h2>
                 <h3>🌐 URL check for ${URL} has failed. HTTP status was ${response.status}</h3>
                 ${checkMessage}
                 ${notCheckMessage}
-                <br><p>Bye!</p>
+                <br><p>I hope this hasn't ruined your day!</p>
                 `
       }]
     }
