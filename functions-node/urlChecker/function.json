@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "name": "myTimer",
+      "type": "timerTrigger",
+      "direction": "in",
+      "schedule": "0 */10 * * * *",
+      "runOnStartup": true
+    },
+    {
+      "type": "sendGrid",
+      "name": "message",
+      "direction": "out",
+      "apiKey": "SENDGRID_API_KEY",
+      "from": "URL Checker <benc.uk@gmail.com>"
+    }
+  ]
+}
