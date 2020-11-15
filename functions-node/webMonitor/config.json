@@ -1,0 +1,12 @@
+{
+  "emailTo": "benc.uk@gmail.com",
+  "headers": {
+    "User-Agent": "TestLemon"
+  },
+  "checks": [
+    {
+      "url": "http://localhost:8090/",
+      "expect": "close"
+    }
+  ]
+}
