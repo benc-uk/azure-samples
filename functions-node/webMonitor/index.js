@@ -9,7 +9,7 @@ const HTTP = require('./http')
 //
 // Main entry point, which loads config & runs all URL checks
 //
-async function runAllChecks(context, myTimer) {
+async function runAllChecks(context, scheduleTimer) {
   let timeStamp = new Date().toUTCString()
   context.log(`### Web Monitor checks starting ${timeStamp}`)
 

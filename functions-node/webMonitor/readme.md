@@ -84,9 +84,12 @@ Example of a more complete config
 }
 ```
 
+# Schedule Frequency
+This is set in function.json in the `schedule` [cron style setting](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-timer?tabs=javascript) of the **scheduleTimer** binding
+
 # Standalone Mode
 The function can run outside of Azure Functions and without the Functions runtime.  
-All the same environmental variables and config applies, in addition `WEBMONITOR_INTERVAL` sets the checking frequency in seconds (default 300)
+All the same environmental variables and config applies, in addition `WEBMONITOR_INTERVAL` sets the checking frequency in seconds (default 300), function.json is ignored
 
 Start with 
 ```bash
