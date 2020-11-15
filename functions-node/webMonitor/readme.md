@@ -1,11 +1,11 @@
 # Web Monitor
-This function allows for the monitoring of several URLs and checking the results in a number of ways.  
+This function allows for the monitoring of a range of URLs and run checks against the result.  
 Alert notification emails will be sent when any of the checks you configure fail
 
 # Pre-reqs
 Emails are sent using SendGrid, so a SendGrid API key is required, [but signup is free](https://signup.sendgrid.com/)
 
-# Configuration Variables
+# Configuration Environmental Variables
 Required environmental variable / app settings
 - `SENDGRID_API_KEY`: Your SendGrid API key
 
@@ -16,7 +16,7 @@ Optional environmental variable / app settings
 # Monitor Config
 Main monitor configuration is done one of two ways: Setting the `WEBMONITOR_CONFIG` variable, or with a `config.json` file. If both are available the environmental variable takes precedence. 
 
-When using `WEBMONITOR_CONFIG` it should be a string holding a JSON stringify'ed valid JSON config (as shown below). This is a [simple online tool to stringify JSON](https://onlinetexttools.com/json-stringify-text)
+When using `WEBMONITOR_CONFIG` variable, it should be a string holding a JSON stringify'ed valid JSON config (as shown below). This is a [simple online tool to stringify JSON](https://onlinetexttools.com/json-stringify-text)
 
 Example of minimal config, which will check 'https://example.net' and sent any alerts to 'dave@example.net'
 ```json

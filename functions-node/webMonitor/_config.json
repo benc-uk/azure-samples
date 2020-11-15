@@ -1,0 +1,20 @@
+{
+  "emailTo": "benc.uk@gmail.com",
+  "checks": [
+    {
+      "url": "https://www.amazon.co.uk/PlayStation-9395003-5-Console/dp/B08H95Y452",
+      "expect": "Currently unavailable",
+      "dontExpect": "Add to Basket"
+    },
+    {
+      "url": "https://www.game.co.uk/en/playstation-5-console-2826338",
+      "expect": "Pre-order Now",
+      "dontExpect": "Buy new"
+    },
+    {
+      "url": "https://www.shopto.net/en/ps5hw01-playstation-5-console-p191472/",
+      "expect": "Sold out",
+      "dontExpect": "In Stock"
+    }
+  ]
+}

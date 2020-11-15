@@ -11,7 +11,7 @@ const HTTP = require('./http')
 //
 async function runAllChecks(context, myTimer) {
   let timeStamp = new Date().toUTCString()
-  context.log(`### Web Monitor started ${timeStamp}`)
+  context.log(`### Web Monitor checks starting ${timeStamp}`)
 
   let config
   try {
@@ -63,7 +63,7 @@ async function checkURL(check, context, ignoreRedirects, globalHeaders) {
   if (!check || !check.url) throw "Check is missing URL!"
   if (!check.statuses) check.statuses = [200]
 
-  context.log(`### Checking URL ${check.url}`)
+  context.log(`### Checking: ${check.url}`)
 
   // Use simple HTTP client to make request
   const client = new HTTP('', false, null, globalHeaders, false)
