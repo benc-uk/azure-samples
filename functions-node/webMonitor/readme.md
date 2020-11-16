@@ -1,6 +1,6 @@
 # Web Monitor
-This function allows for the monitoring of a range of URLs and run checks against the result.  
-Alert notification emails will be sent when any of the checks you configure fail
+This function allows for the monitoring of a range of URLs and run checks against the result, such as scanning the content for strings, response times etc.  
+Alert notification emails will be sent to when any of the checks you have configured for any of the URLs, are triggered.
 
 # Pre-reqs
 Emails are sent using SendGrid, so a SendGrid API key is required, [but signup is free](https://signup.sendgrid.com/)
@@ -14,9 +14,9 @@ Optional environmental variable / app settings
 - `WEBMONITOR_DEBUG` - When set to 'true' HTTP response details will be logged to stdout, including response body.
 
 # Monitor Config
-Main monitor configuration is done one of two ways: Setting the `WEBMONITOR_CONFIG` variable, or with a `config.json` file. If both are available the environmental variable takes precedence. 
+Main monitor configuration is done one of two ways: Setting the `WEBMONITOR_CONFIG` environmentals variable, or with a `config.json` file. If both are available the environmental variable takes precedence. The config.json file method is easiest, however when deploying to an Azure Function, your deployed files are generally immutable in App Service/Azure Functions until you redeploy. If you expect to need to change the config often then use the app setting method.
 
-When using `WEBMONITOR_CONFIG` variable, it should be a string holding a JSON stringify'ed valid JSON config (as shown below). This is a [simple online tool to stringify JSON](https://onlinetexttools.com/json-stringify-text)
+When using `WEBMONITOR_CONFIG` variable / app setting, it should be a string holding a JSON stringify'ed valid JSON config (as shown below). This is a [simple online tool to stringify JSON](https://onlinetexttools.com/json-stringify-text)
 
 Example of minimal config, which will check 'https://example.net' and sent any alerts to 'dave@example.net'
 ```json
