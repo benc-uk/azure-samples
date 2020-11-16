@@ -17,7 +17,7 @@ const ctx = {
   // Most of this code is to directly call SendGrid API rather than use Function output binding
   async done() {
     if (ctx.bindings && ctx.bindings.message) {
-      console.log(JSON.stringify(ctx.bindings.message, null, 2))
+      //console.log(JSON.stringify(ctx.bindings.message, null, 2))
       console.log("### Standalone wrapper - calling SendGrid API")
       if (!process.env.SENDGRID_API_KEY) {
         console.log("### Error! SENDGRID_API_KEY is not set, unable to send email")
