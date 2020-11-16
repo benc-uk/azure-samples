@@ -6,7 +6,7 @@
 const runAllChecks = require('./index')
 const HTTP = require('./http')
 
-// Fake context object 
+// Fake Functions context object 
 const ctx = {
   bindings: {},
 
@@ -17,12 +17,12 @@ const ctx = {
   // Most of this code is to directly call SendGrid API rather than use Function output binding
   async done() {
     if (ctx.bindings && ctx.bindings.message) {
+      console.log(JSON.stringify(ctx.bindings.message, null, 2))
       console.log("### Standalone wrapper - calling SendGrid API")
       if (!process.env.SENDGRID_API_KEY) {
         console.log("### Error! SENDGRID_API_KEY is not set, unable to send email")
         return
       }
-      //console.log(ctx.bindings.message.content[0].value)
 
       const sendGridEndpoint = 'https://sendgrid.com/v3'
       const client = new HTTP(sendGridEndpoint, false, { type: 'bearer', creds: process.env.SENDGRID_API_KEY }, null, false)
@@ -45,6 +45,7 @@ runAllChecks(ctx, null)
 // Run on timer, configure with WEBMONITOR_INTERVAL
 const INTERVAL = parseInt(process.env.WEBMONITOR_INTERVAL || "300") * 1000
 setInterval(() => {
+  // Reset output bindings before each run
   ctx.bindings = {}
   runAllChecks(ctx, null)
 }, INTERVAL)

@@ -38,17 +38,19 @@ async function runAllChecks(context, scheduleTimer) {
   }
 
   if (sendEmail) {
-    context.log(`### One or more URL checks has failed, sending email notification to ${config.emailTo}`)
+    context.log(`### One or more URL checks has triggered, sending email notification to ${config.emailTo}`)
 
     context.bindings.message = {
-      personalizations: [{
-        to: [{ "email": config.emailTo }],
-        subject: config.emailSubject
-      }],
+      personalizations: config.emailTo.map(e => {
+        return {
+          to: [{ email: e }],
+          subject: config.emailSubject
+        }
+      }),
       from: { email: config.emailFrom },
       content: [{
         type: 'text/html',
-        value: `<h3>&#x1F525; ${timeStamp} - One or more URL checks has failed</h3><ul>${emailMessages}</ul><br><p>Web Monitor (C) Ben Coleman, 2020<br>https://github.com/benc-uk/azure-samples/tree/master/functions-node/webMonitor/</p>`
+        value: `<h3>&#x1F525; ${timeStamp} - One or more URL checks has triggered</h3><ul>${emailMessages}</ul><br><p>Simple Web Monitor - Ben Coleman, 2020<br>https://github.com/benc-uk/azure-samples/tree/master/functions-node/webMonitor/</p>`
       }]
     }
   }
@@ -178,6 +180,7 @@ function parseConfig() {
   }
 
   if (!config.emailTo) throw "emailTo missing from config"
+  if (!Array.isArray(config.emailTo) || !config.emailTo.length > 0) throw "emailTo should be an array with at least one element"
   if (!config.emailFrom) config.emailFrom = "webmonitor@benco.io"
   if (!config.emailSubject) config.emailSubject = "Web Monitor Alert!"
   if (!config.headers) config.headers = {}
