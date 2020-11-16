@@ -21,7 +21,7 @@ When using `WEBMONITOR_CONFIG` variable, it should be a string holding a JSON st
 Example of minimal config, which will check 'https://example.net' and sent any alerts to 'dave@example.net'
 ```json
 {
-  "emailTo": "dave@example.net",
+  "emailTo": [ "dave@example.net" ],
   "checks": [
     {
       "url": "https://example.net"
@@ -33,7 +33,7 @@ Example of minimal config, which will check 'https://example.net' and sent any a
 Full config reference
 ```text
 {
-  emailTo: (REQUIRED) Address to send alerts to
+  emailTo: (REQUIRED) Array of email addresses to send alerts to
   emailFrom: (optional) Email alerts will be sent from this address, default: 'webmonitor@benco.io'
   emailSubject: (optional) Email subject, default: 'Web Monitor Alert!'
   headers: (optional) Key value pairs added to HTTP request headers of all checks
@@ -45,7 +45,7 @@ Full config reference
       headers: (optional) Key value pairs added to HTTP request headers of this check
       expect: (optional) Check returned content looking for regex/string match
       dontExpect: (optional) Check returned content, and regex/string should NOT match 
-      headerExpect: (optional) Check returned headers looking for this regex/strung
+      headerExpect: (optional) Check returned headers looking for this regex/string
       contentSizeMin: (optional) Content length should be at least this number of bytes
       contentSizeMax: (optional) Content length should be less than this number of bytes
       responseTime: (optional) Response time threshold in milli-seconds
@@ -54,10 +54,12 @@ Full config reference
 }
 ```
 
+Note on uses of `expect`, `dontExpect` - these can be a simple text string to look for in the resulting body HTML or other content. They can also be a [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions) for more advanced scanning
+
 Example of a more complete config
 ```json
 {
-  "emailTo": "dave@example.net",
+  "emailTo": [ "dave@example.net", "bob@bob.com" ],
   "emailFrom": "test@demo.com",
   "emailSubject": "Something bad happened!",
   "headers": {
