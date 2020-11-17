@@ -1,10 +1,11 @@
 //
-// Web Monitor
+// Web Monitor v1.0.0
 // Monitors one or more URLs and checking the results in a number of ways, then sends alert emails
 // Ben Coleman, 2020 (MIT License)
 //
 
 const HTTP = require('./http')
+const fs = require('fs')
 
 //
 // Main entry point, which loads config & runs all URL checks
@@ -13,17 +14,22 @@ async function runAllChecks(context, scheduleTimer) {
   let timeStamp = new Date().toUTCString()
   context.log(`### Web Monitor checks starting ${timeStamp}`)
 
+  // Handle loading the config, die if we can't get config
   let config
   try {
     config = parseConfig()
   } catch (err) {
-    context.log(`### ERROR! Failed to load config - ${err}`)
-    context.done()
-    return
+    throw `### ERROR! Failed to load config - ${err}`
   }
 
-  let sendEmail = false
-  let emailMessages = ''
+  context.log(`### Config loaded with ${config.checks.length} URL checks`)
+  // Debug
+  if (process.env.WEBMONITOR_DEBUG === "true") {
+    context.log(`### DEBUG: Config: ${JSON.stringify(config, null, 1)}`)
+  }
+
+  let sendEmail = false   // Set if any checks fail
+  let emailMessages = ''  // String appended with each failed check message
   for (let check of config.checks) {
     try {
       const message = await checkURL(check, context, config.ignoreRedirects, config.headers)
@@ -65,25 +71,37 @@ async function checkURL(check, context, ignoreRedirects, globalHeaders) {
   if (!check || !check.url) throw "Check is missing URL!"
   if (!check.statuses) check.statuses = [200]
 
+  if (check.disabled) {
+    context.log(`### Skipping: ${check.url}`)
+    return
+  }
+
   context.log(`### Checking: ${check.url}`)
 
-  // Use simple HTTP client to make request
+  // Use simple HTTP client (see http.js) to make request
+  // Add any global headers (for all requests)
   const client = new HTTP('', false, null, globalHeaders, false)
   const startTime = Date.now()
+
+  // Make the HTTP request, with any additional check level headers
   let response = await client.get(check.url, check.headers)
 
   // Handle redirects, which is the default unless ignoreRedirects is set
   if (!ignoreRedirects && (response.status == 301 || response.status == 302)) {
-    response = await client.get(response.headers.location)
+    context.log(` - Following redirect to ${response.headers.location}`)
+    response = await client.get(response.headers.location, check.headers)
   }
   const endTime = Date.now()
 
   // Debug
-  if (process.env.WEBMONITOR_DEBUG) {
+  if (process.env.WEBMONITOR_DEBUG === "true") {
     context.log(`### DEBUG: Status: ${response.status}`)
     context.log(`### DEBUG: Headers: ${JSON.stringify(response.headers, null, 1)}`)
     context.log('### DEBUG: Content: ')
     context.log(response.data)
+    // if (!fs.existsSync(`${__dirname}/debug/`)) { fs.mkdirSync(`${__dirname}/debug`) }
+    // const fn = check.url.replace(/https?:\/\//g, "").replace(/\//g, ":")
+    // fs.writeFileSync(`${__dirname}/debug/${fn}.log`, `${response.status}\n\n${JSON.stringify(response.headers, null, 1)}\n\n${response.data}`)
   }
 
   // Check status code
@@ -97,7 +115,7 @@ async function checkURL(check, context, ignoreRedirects, globalHeaders) {
 
   // Look for expected content
   if (check.expect) {
-    let re = new RegExp(check.expect)
+    let re = new RegExp(check.expect, 'gms')
     if (response.data.search(re) == -1) {
       msg = `Expected to find '${check.expect}' in content, but it was not found`
       context.log(`### - ${msg}`)
@@ -107,7 +125,7 @@ async function checkURL(check, context, ignoreRedirects, globalHeaders) {
 
   // Look for regex not wanted in content
   if (check.dontExpect) {
-    let re = new RegExp(check.dontExpect)
+    let re = new RegExp(check.dontExpect, 'gms')
     if (response.data.search(re) != -1) {
       msg = `The regex '${check.dontExpect}' found in content, but it was not expected`
       context.log(`### - ${msg}`)
@@ -118,7 +136,6 @@ async function checkURL(check, context, ignoreRedirects, globalHeaders) {
   // Scan headers for regex
   if (check.headerExpect) {
     let re = new RegExp(check.headerExpect)
-    console.log()
     const headers = JSON.stringify(response.headers)
     if (headers.search(re) == -1) {
       msg = `Response HTTP headers did not contain '${check.headerExpect}'`
@@ -148,7 +165,6 @@ async function checkURL(check, context, ignoreRedirects, globalHeaders) {
   // Check response time in milli-seconds
   if (check.responseTime) {
     const time = endTime - startTime
-    console.log(time)
     if (time > check.responseTime) {
       msg = `Response time of ${time}ms exceeded the threshold of ${check.responseTime}ms`
       context.log(`### - ${msg}`)
@@ -171,12 +187,7 @@ function parseConfig() {
     //console.log(configString)
     config = JSON.parse(configString)
   } else {
-    try {
-      config = require('./config.json')
-    } catch (err) { }
-
-    if (!config)
-      throw "WEBMONITOR_CONFIG not set and config.json not found!"
+    config = require('./config.json')
   }
 
   if (!config.emailTo) throw "emailTo missing from config"

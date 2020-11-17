@@ -9,6 +9,6 @@
   "author": "Ben Coleman",
   "dependencies": {
     "azure-storage": "^2.10.3",
-    "csv-parse": "^4.12.0"
+    "csv-parse": "^4.14.1"
   }
 }

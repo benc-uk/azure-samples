@@ -77,12 +77,21 @@ module.exports = class HTTP {
         let body = []
         response.on('data', (chunk) => body.push(chunk))
         response.on('end', () => {
+          let data
+          try {
+            data = this.parseResults ? JSON.parse(body.join('')) : body.join('')
+          } catch (err) {
+            reject(`JSON parsing of response body failed  - ${err}`)
+          }
+
+          // Our custom response result wrapper, with Axios like fields
           const resp = {
             headers: response.headers,
             status: response.statusCode,
             statusText: response.statusMessage,
-            data: this.parseResults ? JSON.parse(body.join('')) : body.join('')
+            data
           }
+
           if (this.debug) console.log(`### HTTP client response:`, resp)
           if (this.checkStatus && (response.statusCode < 200 || response.statusCode > 299)) {
             console.error('Error! Request failed with status code: ' + response.statusCode)
