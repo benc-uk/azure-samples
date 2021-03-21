@@ -5,7 +5,6 @@
 //
 
 const HTTP = require('./http')
-const fs = require('fs')
 
 //
 // Main entry point, which loads config & runs all URL checks

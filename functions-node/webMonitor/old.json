@@ -1,0 +1,43 @@
+{
+  "emailTo": [
+    "benc.uk@gmail.com"
+  ],
+  "emailFrom": "benc.uk@gmail.com",
+  "emailSubject": "PS5 Stock Alert",
+  "headers": {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69"
+  },
+  "checks": [
+    {
+      "url": "https://www.shopto.net/en/ps5hw01-playstation-5-console-p191472/",
+      "expect": "Sold out",
+      "dontExpect": "In Stock"
+    },
+    {
+      "url": "https://www.amazon.co.uk/PlayStation-9395003-5-Console/dp/B08H95Y452",
+      "expect": "Currently unavailable",
+      "dontExpect": "Add to Basket",
+      "headers": {
+        "cookie": "session-id=262-7052653-2347721; i18n-prefs=GBP; ubid-acbuk=259-3493063-7848560; session-token=ntwUeb5lvKytcvLLMBo83zytjfiC0RjitFs2kMwzyurJ0fT2T/NiioSQrSO0FPFRiGlP7tHMFoU06B8bvJvQeRjlSv7IzfPlmegdqFGOOgOCEbENbnKDfJEg1F7gCSVqnbmqI910GSkI8UJLQUFKZOjf+nsQBqRhDa1EuiPUXgov9by4fL2Q98t2LphJDDLv; csm-hit=tb:MSQA88C1SEKXRA5J4H01+s-A5G0Z23EBQ1QF7J144C8|1605692585723&t:1605692585724&adb:adblk_no; session-id-time=2082787201l"
+      }
+    },
+    {
+      "url": "https://www.game.co.uk/playstation-5",
+      "expect": "let merchFolder = '201111'"
+    },
+    {
+      "url": "https://assets.game.net/_master/hardwarePages/playstation5/merch/201111/ps5.js",
+      "expect": "PlayStation 5.*?Out of stock"
+    },
+    {
+      "disabled": true,
+      "url": "https://www.argos.co.uk/search/playstation-5/",
+      "expect": "Sorry, PlayStation®5 is currently unavailable"
+    },
+    {
+      "disabled": true,
+      "url": "https://direct.playstation.com/en-us/consoles/console/playstation5-console.3005816",
+      "expect": "Out of Stock"
+    }
+  ]
+}
