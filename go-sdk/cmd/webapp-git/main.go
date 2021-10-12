@@ -6,15 +6,15 @@ import (
 	"log"
 	"os"
 	"time"
-	
+
 	"github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2018-05-01/resources"
 	"github.com/Azure/azure-sdk-for-go/services/web/mgmt/2018-02-01/web"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/akamensky/argparse"
 	"github.com/briandowns/spinner"
 	"github.com/joho/godotenv"
-	"github.com/akamensky/argparse"
 )
 
 var azureSubID string
@@ -26,9 +26,9 @@ func main() {
 
 	parser := argparse.NewParser("webapp-git", "Deploy an Azure App Service and deploy a git repo to it")
 	appServiceName := parser.String("n", "name", &argparse.Options{Required: true, Help: "App Service web app name"})
-	gitRepoURL     := parser.String("r", "repo", &argparse.Options{Required: true, Help: "Git repository URL"})
-	azureResGroup  := parser.String("g", "group", &argparse.Options{Required: true, Help: "Azure resource group"})
-	azureLocation  := parser.String("l", "location", &argparse.Options{Required: true, Help: "Azure location / region"})
+	gitRepoURL := parser.String("r", "repo", &argparse.Options{Required: true, Help: "Git repository URL"})
+	azureResGroup := parser.String("g", "group", &argparse.Options{Required: true, Help: "Azure resource group"})
+	azureLocation := parser.String("l", "location", &argparse.Options{Required: true, Help: "Azure location / region"})
 
 	err := parser.Parse(os.Args)
 	if err != nil {
@@ -36,7 +36,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute * 10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*10)
 	defer cancel()
 
 	authorizer, err := auth.NewAuthorizerFromEnvironment()
@@ -72,14 +72,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("### Web App fully deployed at:", "http://" + *appServiceName + ".azurewebsites.net/")
+	fmt.Println("### Web App fully deployed at:", "http://"+*appServiceName+".azurewebsites.net/")
 }
 
 // CreateServicePlan - Create an Azure App Service plan
 // ====================================================
 func CreateServicePlan(ctx context.Context, authorizer autorest.Authorizer, resGroup, azureLocation, name string) (id *string, err error) {
 	fmt.Println("### Creating App Service Plan")
-	spin := spinner.New(spinner.CharSets[14], 100 * time.Millisecond)
+	spin := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	spin.Start()
 	client := web.NewAppServicePlansClient(azureSubID)
 	client.Authorizer = authorizer
@@ -110,12 +110,11 @@ func CreateServicePlan(ctx context.Context, authorizer autorest.Authorizer, resG
 	return createdPlan.ID, nil
 }
 
-
 // CreateWebAppFromGit - Create an Azure App Service web app and deploy to it from Git
 // ===================================================================================
 func CreateWebAppFromGit(ctx context.Context, authorizer autorest.Authorizer, resGroup, azureLocation, name, gitRepoURL string, planID *string) (err error) {
 	fmt.Println("### Creating Web App")
-	spin := spinner.New(spinner.CharSets[14], 100 * time.Millisecond)
+	spin := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	spin.Start()
 	client := web.NewAppsClient(azureSubID)
 	client.Authorizer = authorizer

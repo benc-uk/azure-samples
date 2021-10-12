@@ -41,11 +41,11 @@ Full config reference
 
 ```text
 {
-  emailTo:         (REQUIRED) Array of email addresses to send alerts to
-  emailFrom:       (optional) Email alerts will be sent from this address, default: 'webmonitor@benco.io'
-  emailSubject:    (optional) Email subject, default: 'Web Monitor Alert!'
-  headers:         (optional) Key value pairs added to HTTP request headers of all checks
-  ignoreRedirects: (optional) Default is to follow redirects, set this to true to ignore them.
+  emailTo:            (REQUIRED) Array of email addresses to send alerts to
+  emailFrom:          (optional) Email alerts will be sent from this address, default: 'webmonitor@benco.io'
+  emailSubject:       (optional) Email subject, default: 'Web Monitor Alert!'
+  headers:            (optional) Key value pairs added to HTTP request headers of all checks
+  ignoreRedirects:    (optional) Default is to follow redirects, set this to true to ignore them.
   checks: [
     {
       url:            (REQUIRED) URL to monitor and check

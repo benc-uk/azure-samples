@@ -12,9 +12,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/akamensky/argparse"
 	"github.com/briandowns/spinner"
 	"github.com/joho/godotenv"
-	"github.com/akamensky/argparse"
 )
 
 var azureSubID string
@@ -23,12 +23,12 @@ func main() {
 	godotenv.Load("../../.env")
 	godotenv.Load(".env")
 	azureSubID = os.Getenv("AZURE_SUBSCRIPTION_ID")
-	
+
 	parser := argparse.NewParser("webapp-container", "Deploy an Azure App Service web app container")
 	appServiceName := parser.String("n", "name", &argparse.Options{Required: true, Help: "App Service web app name"})
-	imageName      := parser.String("i", "image", &argparse.Options{Required: true, Help: "Containter image to deploy to web app"})
-	azureResGroup  := parser.String("g", "group", &argparse.Options{Required: true, Help: "Azure resource group"})
-	azureLocation  := parser.String("l", "location", &argparse.Options{Required: true, Help: "Azure location / region"})
+	imageName := parser.String("i", "image", &argparse.Options{Required: true, Help: "Containter image to deploy to web app"})
+	azureResGroup := parser.String("g", "group", &argparse.Options{Required: true, Help: "Azure resource group"})
+	azureLocation := parser.String("l", "location", &argparse.Options{Required: true, Help: "Azure location / region"})
 
 	err := parser.Parse(os.Args)
 	if err != nil {
@@ -36,10 +36,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute * 10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute*10)
 	defer cancel()
 
-	authorizer, err := auth.NewAuthorizerFromEnvironment()
+	//authorizer, err := auth.NewAuthorizerFromEnvironment()
+	authorizer, err := auth.NewAuthorizerFromCLI()
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -73,14 +74,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("### Web App deployed at:", "http://" + *appServiceName + ".azurewebsites.net/")
+	fmt.Println("### Web App deployed at:", "http://"+*appServiceName+".azurewebsites.net/")
 }
 
 // CreateServicePlan - Create an Linux Azure App Service plan
 // ==========================================================
 func CreateServicePlan(ctx context.Context, authorizer autorest.Authorizer, resGroup, azureLocation, name string) (id *string, err error) {
 	fmt.Println("### Creating Linux App Service Plan")
-	spin := spinner.New(spinner.CharSets[14], 100 * time.Millisecond)
+	spin := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	spin.Start()
 	client := web.NewAppServicePlansClient(azureSubID)
 	client.Authorizer = authorizer
@@ -104,7 +105,7 @@ func CreateServicePlan(ctx context.Context, authorizer autorest.Authorizer, resG
 		return
 	}
 
-	err = future.Future.WaitForCompletionRef(ctx, client.Client)
+	err = future.WaitForCompletionRef(ctx, client.Client)
 	if err != nil {
 		return
 	}
@@ -119,7 +120,7 @@ func CreateServicePlan(ctx context.Context, authorizer autorest.Authorizer, resG
 // ====================================================================
 func CreateWebAppContainer(ctx context.Context, authorizer autorest.Authorizer, resGroup, azureLocation, name, image string, planId *string) (err error) {
 	fmt.Println("### Creating Container Web App from image", image)
-	spin := spinner.New(spinner.CharSets[14], 100 * time.Millisecond)
+	spin := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
 	spin.Start()
 	client := web.NewAppsClient(azureSubID)
 	client.Authorizer = authorizer
@@ -141,7 +142,7 @@ func CreateWebAppContainer(ctx context.Context, authorizer autorest.Authorizer, 
 		return err
 	}
 
-	err = futureSite.Future.WaitForCompletionRef(ctx, client.Client)
+	err = futureSite.WaitForCompletionRef(ctx, client.Client)
 	if err != nil {
 		return err
 	}
