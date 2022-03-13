@@ -1,11 +1,16 @@
 {
-  "name": "azure-nodesdk",
-  "description": "Example scripts for Node.js Azure SDK",
-  "version": "0.1.0",
+  "name": "azure-samples-node",
+  "version": "1.0.0",
+  "description": "Azure stuff",
+  "scripts": {},
   "author": "Ben Coleman",
+  "license": "MIT",
   "dependencies": {
-    "@azure/arm-compute": "^10.0.0",
-    "@azure/ms-rest-nodeauth": "^2.0.2",
-    "dotenv": "^8.0.0"
+    "@azure/arm-appservice": "^11.0.0",
+    "@azure/arm-compute": "^17.2.0",
+    "@azure/arm-resources": "^5.0.0",
+    "@azure/identity": "^2.0.4",
+    "axios": "^0.26.0",
+    "dotenv": "^16.0.0"
   }
 }

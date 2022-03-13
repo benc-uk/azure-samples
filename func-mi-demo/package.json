@@ -1,0 +1,13 @@
+{
+  "name": "simple-function-demo",
+  "version": "0.0.1",
+  "description": "A simple demo of Azure Functions",
+  "scripts": {
+    "start": "func start"
+  },
+  "author": "Ben Coleman",
+  "dependencies": {
+    "@azure/arm-resources": "^5.0.0",
+    "@azure/identity": "^2.0.4"
+  }
+}
