@@ -1,0 +1,16 @@
+{
+  "name": "azure-email-quickstart",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node send-mail.js"
+  },
+  "keywords": [],
+  "author": "Ben Coleman",
+  "license": "MIT",
+  "dependencies": {
+    "@azure/communication-email": "^1.0.0-beta.1",
+    "dotenv": "^16.0.1"
+  }
+}
