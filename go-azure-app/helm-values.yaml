@@ -1,0 +1,20 @@
+# Deploy with:
+# helm upgrade go-azure-app benc-uk/webapp --values helm-values.yaml --install
+
+image:
+  repository: ghcr.io/benc-uk/go-azure-app
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+env:
+  AZURE_STORAGE_NAME: "benstuff"
+
+podLabels:
+  aadpodidbinding: go-azure-app
+
+# az aks pod-identity add --cluster-name sandbox --resource-group aks --namespace default --name go-azure-app --identity-resource-id /subscriptions/096d0eee-c6d6-4b21-9be9-2063e23bf6f1/resourcegroups/temp/providers/Microsoft.ManagedIdentity/userAssignedIdentities/go-azure-app
