@@ -13,8 +13,11 @@ service:
 
 env:
   AZURE_STORAGE_NAME: "benstuff"
+  AZURE_SDK_GO_LOGGING: "all"
 
 podLabels:
   aadpodidbinding: go-azure-app
 
-# az aks pod-identity add --cluster-name sandbox --resource-group aks --namespace default --name go-azure-app --identity-resource-id /subscriptions/096d0eee-c6d6-4b21-9be9-2063e23bf6f1/resourcegroups/temp/providers/Microsoft.ManagedIdentity/userAssignedIdentities/go-azure-app
+# az aks pod-identity add --cluster-name sandbox \
+# --resource-group aks --namespace default --name go-azure-app \
+# --identity-resource-id REMOVED

@@ -32,26 +32,30 @@ type SimpleAPI struct {
 //
 func main() {
 	log.SetOutput(os.Stdout) // Personal preference on log output
-	log.Printf("### Azure SDK storage example v%v starting...", version)
+	log.Printf("### Azure SDK & managed identity storage example v%v starting...", version)
 
 	// Port to listen on, change the default as you see fit
 	serverPort := os.Getenv("PORT")
 	if serverPort == "" {
 		serverPort = "8000"
 	}
-	storageName := os.Getenv("AZURE_STORAGE_NAME")
-	if storageName == "" {
-		log.Fatalln("### FATAL: AZURE_STORAGE_NAME not set")
+	storageAcctName := os.Getenv("AZURE_STORAGE_ACCOUNT")
+	if storageAcctName == "" {
+		log.Fatalln("### FATAL: AZURE_STORAGE_ACCOUNT not set")
+	}
+	if os.Getenv("AZURE_CLIENT_ID") != "" {
+		log.Println("### NOTE: AZURE_CLIENT_ID is set, it will be picked for user-assigned managed identity")
 	}
 
-	// Use DefaultAzureCredential to connect to Azure resources
-	// See https://learn.microsoft.com/en-us/azure/developer/go/azure-sdk-authentication
-	cred, err := azidentity.NewDefaultAzureCredential(nil)
+	// DefaultAzureCredential supports all auth scenarios, including user-assigned managed identity
+	// When user-assigned managed identity is used, AZURE_CLIENT_ID must be set
+	creds, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln("### FATAL: Failed to create credentials")
 	}
+
 	// Create the shared blob client
-	blobClient, err := azblob.NewClient(fmt.Sprintf("https://%s.blob.core.windows.net/", storageName), cred, nil)
+	blobClient, err := azblob.NewClient(fmt.Sprintf("https://%s.blob.core.windows.net/", storageAcctName), creds, nil)
 	if err != nil {
 		log.Fatal(err)
 	}

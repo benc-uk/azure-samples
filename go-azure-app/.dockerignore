@@ -3,3 +3,4 @@ Dockerfile
 .gitignore
 .vscode
 README.md
+*.yaml
