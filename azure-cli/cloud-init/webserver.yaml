@@ -1,0 +1,47 @@
+#cloud-config
+package_update: true
+packages:
+ - nginx
+ - openssl
+
+write_files:
+  - content: |
+      #!/bin/bash
+      DOMAIN=$(hostname)
+      PUBLIC_IP=$(curl ifconfig.me)
+      openssl req -x509 -newkey rsa:4096 -sha256 -days 300 -nodes \
+       -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.pem -subj "/CN=$DOMAIN" \
+       -addext "subjectAltName=DNS:$DOMAIN,IP:$PUBLIC_IP"
+    path: /root/setup-vm.sh
+    permissions: '0755'
+
+  - content: |
+      server {
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        server_name _;
+
+        ssl_certificate /etc/ssl/certs/nginx-selfsigned.pem;
+        ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+        ssl_protocols TLSv1.2;
+      }
+    path: /etc/nginx/sites-available/default
+    owner: root:root
+
+  - content: |
+      <!DOCTYPE html>
+      <html>
+      <head>
+      <title>Azure Cloud Init - Test Page</title>
+      </head>
+      <body>
+      <h1>Azure Cloud Init - Test Page</h1>
+      <p>This page is used to test the proper operation of the nginx server after it has been installed. This page was configured using the cloud-init process</p>
+      </body>
+      </html>
+    path: /root/nginx-index.html
+
+runcmd:
+  - /root/setup-vm.sh
+  - service nginx restart 
+  - cp /root/nginx-index.html /usr/share/nginx/html/index.html 
