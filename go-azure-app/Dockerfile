@@ -1,7 +1,7 @@
 #
 # Stage 1: Build the Go app
 #
-FROM golang:1.18-alpine AS builder
+FROM golang:1.19-alpine AS builder
 ARG VERSION=1.0.0
 
 WORKDIR /build
@@ -14,9 +14,9 @@ RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
   -o ./server
 
 #
-# Stage 2: Run the app
+# Stage 2: Run the app, we pick ubuntu for debugging & exec reasons
 #
-FROM scratch
+FROM ubuntu
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /build/server /server
 ENV PORT=8000

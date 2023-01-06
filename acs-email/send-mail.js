@@ -11,8 +11,8 @@ require('dotenv').config()
 const connectionString = process.env.COMMUNICATION_SERVICES_CONNECTION_STRING
 
 // Change these!
-const domain = 'changeme.azurecomm.net'
-const toEmail = 'changeme@example.com'
+const domain = 'd51fdd01-2a9e-4a95-9cea-3e159c0e15ba.azurecomm.net'
+const toEmail = 'benc.uk@gmail.com'
 
 async function main() {
   try {

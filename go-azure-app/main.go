@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/gorilla/mux"
@@ -27,9 +28,7 @@ type SimpleAPI struct {
 	blobClient *azblob.Client
 }
 
-//
 // Main entry point, will start HTTP service
-//
 func main() {
 	log.SetOutput(os.Stdout) // Personal preference on log output
 	log.Printf("### Azure SDK & managed identity storage example v%v starting...", version)
@@ -52,6 +51,17 @@ func main() {
 	creds, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
 		log.Fatalln("### FATAL: Failed to create credentials")
+	}
+
+	// This is pure debug and triage stuff, you never would need this in a real app
+	// Certainly wouldn't log the token to stdout!!
+	const wiTokenFile = "/var/run/secrets/azure/tokens/azure-identity-token"
+	storageToken, _ := creds.GetToken(context.Background(), policy.TokenRequestOptions{Scopes: []string{"https://storage.azure.com/.default"}})
+	log.Printf("### Got a token for the Azure storage API:\n%s\n", storageToken.Token)
+	if tokenFileStat, _ := os.Stat(wiTokenFile); tokenFileStat != nil {
+		log.Println("### Found projected workload identity token for AAD exchange")
+		wiToken, _ := os.ReadFile(wiTokenFile)
+		log.Printf("### Token:\n%s\n", string(wiToken))
 	}
 
 	// Create the shared blob client
@@ -78,17 +88,13 @@ func main() {
 	}
 }
 
-//
 // Simple root route, returns 200 OK
-//
 func (api *SimpleAPI) routeRoot(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte("OK"))
 }
 
-//
 // List blobs in a container, returns JSON
-//
 func (api *SimpleAPI) routeListBlobs(resp http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	containerName := vars["containerName"]
@@ -116,9 +122,7 @@ func (api *SimpleAPI) routeListBlobs(resp http.ResponseWriter, req *http.Request
 	}
 }
 
-//
 // Create or update a blob using POST data
-//
 func (api *SimpleAPI) routeCreateBlob(resp http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	containerName := vars["containerName"]

@@ -1,0 +1,18 @@
+### Example of workload identity federation
+### Exchange a token via the client credentials flow and federated identity
+### Get the token from your Kubernete pod in /var/run/secrets/azure/tokens/azure-identity-token
+
+@token=__token__
+@tenantId=__tenantId__
+@clientId=__clientId__
+@scope=https://storage.azure.com/.default
+#@scope=https://graph.microsoft.com/.default
+
+POST login.microsoft.com/{{tenantId}}/oauth2/v2.0/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id={{clientId}}
+&client_assertion={{token}}
+&scope={{scope}}
+&grant_type=client_credentials
+&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer
