@@ -1,0 +1,25 @@
+name: OIDC Demo
+
+on: workflow_dispatch
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+jobs:
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Azure login and get access token"
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUB_ID }}
+
+      - name: "Run Azure CLI commands"
+        run: |
+          echo "****** Account info ******"
+          az account show -o yaml
+          echo "****** List of resource groups ******"
+          az group list -o table
