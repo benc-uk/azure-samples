@@ -1,0 +1,3 @@
+[submodule "functions-ts/deploy/bicep-iac"]
+	path = functions-ts/deploy/bicep-iac
+	url = https://github.com/benc-uk/bicep-iac.git
